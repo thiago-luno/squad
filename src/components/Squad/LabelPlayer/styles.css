@@ -1,0 +1,27 @@
+body.dragging {
+    cursor: crosshair !important;
+ }
+
+.list-players__item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(254,254,254,1) 0%, rgba(230,230,230,1) 100%);
+    height: 75px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    cursor: grab;
+}
+
+.list-players__item span {
+    color: #cf3868;
+}
+
+.list-players__item span {
+    color: #cf3868;
+}
+
+.list-players__item strong {
+    color: #333333;
+    margin-right: 5px;
+}
