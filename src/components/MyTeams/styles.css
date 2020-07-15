@@ -1,0 +1,46 @@
+.myTeams {
+ height: calc(100vh - 60px);
+}
+
+.myTeams__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.myTeams__content-title {
+    width: 80%;
+}
+
+.myTeams__content-btn {
+    width: 20%;
+}
+
+.myTeams .btn-default {
+    width: 35px;
+}
+
+.myTeams__container {
+    padding: 1rem 1.5rem;
+}
+
+.myTeams Table {
+    font-size: 10px;
+}
+
+.style-row-icons {
+    float: right;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    font-size: .6rem;
+    opacity: 0;
+}
+
+.style-row-icons svg {
+    margin-left: 10px;
+}
+
+.row:hover .style-row-icons{
+    opacity: 1;
+}

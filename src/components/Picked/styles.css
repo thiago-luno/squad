@@ -1,0 +1,89 @@
+.field {
+    height: 300px;
+    background: rgb(0,0,0);
+    background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(185,61,124,1) 0%, rgba(103,47,135,1) 100%);
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.field__marks {
+    height: 100%;
+    position: absolute;
+}
+
+.field__line {
+    width: 1px;
+    height: 100%;
+    background: #ba6799;
+}
+
+.field__circle {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    border: 1px solid #ba6799;
+    border-radius: 100%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.right-side, .left-side {
+    width: 50%;
+    position: absolute;
+    text-align: center;
+}
+.right-side {
+    right: 0;
+}
+
+.left-side {
+    left: 0;
+}
+
+.picked__content-avatar {
+    display: flex;
+}
+
+.picked__title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.picked__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background: #fff;
+    color: #454545;
+    font-size: 3.5rem;
+    margin-left: 25%;
+}
+
+.picked__average {
+    height: 20px;
+    width: 50px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 1px solid #fff;
+}
+
+/* .picked__avatar::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    width: 130px;
+    height: 130px;
+    border-radius: 100%;
+    border-width: 3px;
+    border: 4px dashed #ad81c4;
+} */
