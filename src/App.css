@@ -26,6 +26,10 @@ input {
   height: 30px;
 }
 
+label.error-message + input {
+  border: 1px solid #cd275c;
+}
+
 input[type="radio"] {
   margin-right: 10px;
 }
@@ -95,6 +99,10 @@ ul {
 
 .card-app__container {
   padding: 1.5rem;
+}
+
+.error-message {
+  color: #cd275c;
 }
 
 /* Utils */

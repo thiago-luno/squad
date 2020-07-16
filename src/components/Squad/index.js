@@ -15,28 +15,26 @@ export default function Squad(props) {
     const [listPlayers, setListPlayers] = useState([]);
     const [formation, setFormation] = useState([]);
 
+    // formation 4-4-2
     const [droppedPlayers, setDroppedPlayers] = useState([
         {id: '1', value: null, position: 'gk'},
-        {id: '2', value: null, position: null},
-        {id: '3', value: null, position: null},
-        {id: '4', value: null, position: null},
-        {id: '5', value: null, position: null},
-        {id: '6', value: null, position: null},
-        {id: '7', value: null, position: null},
-        {id: '8', value: null, position: null},
-        {id: '9', value: null, position: null},
-        {id: '10', value: null, position: null},
-        {id: '11', value: null, position: null}
+        {id: '2', value: null, position: "deffense"},
+        {id: '3', value: null, position: "deffense"},
+        {id: '4', value: null, position: "deffense"},
+        {id: '5', value: null, position: "deffense"},
+        {id: '6', value: null, position: "middle"},
+        {id: '7', value: null, position: "middle"},
+        {id: '8', value: null, position: "middle"},
+        {id: '9', value: null, position: "middle"},
+        {id: '10', value: null, position: "attack"},
+        {id: '11', value: null, position: "attack"}
     ])
 
     function changeFormation(formation) {
         
-        const lines = getLines(formation);
-      
-
-        console.log('lines :>> ', lines);
-        
+        const lines = getLines(formation);   
         let position = [];
+        position[0] = "gk";
 
         for(let x = 1; x <= lines.defense; x++) {
             position[x] = "deffense";
@@ -48,20 +46,11 @@ export default function Squad(props) {
 
         if(lines.middleAttack) {
             for(let x = 1; x <= lines.middleAttack; x++) {
-                console.log('middleAttack', x)
-                setDroppedPlayers(produce(droppedPlayers, draft => {
-                    draft[x + parseInt(lines.middle)].position = "middleAttack";
-                }))
-                position[x + parseInt(lines.middle)] = "middleAttack";
+                position[x + parseInt(lines.middle) + parseInt(lines.defense)] = "middleAttack";
             }
 
             for(let x = 1; x <= lines.attack; x++) {
-                console.log('attack', x)
-                setDroppedPlayers(produce(droppedPlayers, draft => {
-                    draft[x + parseInt(lines.middleAttack)].position = "attack";
-                }))
-
-                position[x + parseInt(lines.middleAttack)] = "attack";
+                position[x +  (parseInt(lines.middleAttack) + (parseInt(lines.middle) + parseInt(lines.defense)))] = "attack";
                 
             }
         } else {
@@ -70,16 +59,13 @@ export default function Squad(props) {
             }
         }
 
-        setDroppedPlayers(produce(droppedPlayers, draft => {
+        setDroppedPlayers(produce(droppedPlayers, drafts => {
             for(const index in position) {
-                console.log('index :>> ', index);
-                console.log('droppedPlayers :>> ', droppedPlayers[index]);
-                draft[index].position = position[index];
-
+                drafts[index].position = position[index];
             }
-        }))
+        })) 
         
-        console.log('droppedPlayers :>> ',  droppedPlayers);
+        console.log('droppedPlayers', droppedPlayers)
     }
 
     function getLines(formation) {
@@ -164,8 +150,7 @@ export default function Squad(props) {
                                 onDrop={insertPlayer} />
 
                         </div>
-
-                        <button className="btn-save">Save</button>
+                    
                     </Grid>
 
                     <Grid item xs={6}>
