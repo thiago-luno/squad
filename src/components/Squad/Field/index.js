@@ -4,7 +4,7 @@ import { MenuItem } from '@material-ui/core';
 import  Player  from '../Player';
 
 export default function Field(props) {
-    
+
     const { changeFormation, droppedPlayers, onDrop } = props;
     const [gk, setGk] = useState([]);
     const [defense, setDefense] = useState([]);
@@ -13,9 +13,18 @@ export default function Field(props) {
     const [attack, setAttack] = useState([]);
     const [selectFormation, setSelectFormation] = useState([]); 
 
-    useEffect(() => temp(),[droppedPlayers])
-    useEffect(() => setSelectFormation('4-4-2'),[])
-    
+    useEffect(() => { 
+        temp();
+    }, [droppedPlayers])
+
+    useEffect(() => {
+        setSelectFormation(selectFormation);
+    },[])
+
+    useEffect(() => {
+        setSelectFormation(selectFormation);
+    },[selectFormation])
+
     function temp() {
         let gk = droppedPlayers.filter(player => player.position === 'gk');
         let defense = droppedPlayers.filter(player => player.position === 'deffense');

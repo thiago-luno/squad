@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import MyTeams from '../../components/MyTeams';
 import TopFive from '../../components/TopFive';
+import Api from '../../services/api';
 
 import './styles.css';
 
@@ -12,8 +13,15 @@ export default function Home(props) {
     const [ squads, setSquads ] = useState([])
 
     useEffect(() => {
-        setSquads(JSON.parse(sessionStorage.getItem('teams')))
-    }, [])
+        const teams = Api.getSquads();
+        setSquads(teams)
+    }, []);
+
+    function removeSquad(id) {
+        Api.deleteSquad(id);
+        const teams = Api.getSquads();
+        setSquads(teams)
+    }
 
     return (
         <div>
@@ -24,8 +32,7 @@ export default function Home(props) {
                         <Grid item xs={6}>
                             <MyTeams 
                                 squads={squads} 
-                                deleteSquad={props.deleteSquad}
-                                createMode={props.createMode}
+                                removeSquad={removeSquad}
                                 />
                         </Grid>
                         <Grid item xs={6}>

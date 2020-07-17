@@ -11,49 +11,67 @@ import TextField from "@material-ui/core/TextField";
 import Utils from '../../services/utils';
 import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import  Api  from '../../services/api'; 
+import { useEffect } from 'react';
 
-export default function Register() {
-
+export default function Register(props) {
+    const [id, setId] = useState('');
     const [teamName, setTeamName] = useState('');
     const [description, setDescription] = useState('');
     const [teamWebSite, setTeamWebSite] = useState('');
     const [type, setType] = useState('');
     const [tags, setTags] = useState([]);
-
+    const [squad, setSquad] = useState([]);
+    
     const history = useHistory();
-
+    
     const { register, handleSubmit, errors } = useForm();
+    
+    function saveSquad(squad, formation) {
+        setSquad({squad, formation})
+    }
 
-    function saveSquad() {
+    useEffect(() => {   
+        
+        if(props.match.params.id) 
+            editMode();
+    },[]);
     
-    
+    function editMode(id) {
+        const team = Api.getSquadById(props.match.params.id);
+        setId(id);
+        setTeamName(team.teamName);
+        setDescription(team.description);
+        setTeamWebSite(team.teamWebSite);
+        setType(team.type);
+        setTags(team.tags);  
+        setSquad(team.squad);
     }
 
     function onSubmit(data) {
         let teams = null;
+        let idTeam = null;
 
-        if(sessionStorage.getItem('teams')) 
-            teams = JSON.parse(sessionStorage.getItem('teams'))
-        
-        const id = teams ? teams[teams.length - 1].id + 1 : 1;
+        if(Api.getSquads().length > 0) {
+            teams = Api.getSquads();
+            console.log('id :>> ', id);
+            idTeam = props.match.params.id ? props.match.params.id : teams[0].id + 1;
+        } else {
+            idTeam = 1;
+        }
 
         const team = {
-            id,
             teamName,
             description,
             teamWebSite,
             type,
-            tags
+            tags,
+            squad
         }
 
-        if(teams)
-            sessionStorage.setItem('teams', JSON.stringify([].concat(team, ...teams)));
-
-        else
-           sessionStorage.setItem('teams',  JSON.stringify([team]))
-
-
-           history.push("/");
+        team.id =  id ? id : idTeam;
+        Api.setSquad(team)
+        history.push("/");
     }
 
     const formReference = useRef();
@@ -66,7 +84,7 @@ export default function Register() {
                     <div className="card-app__container-header">
                         <p className="titles myTeams__content-title" >Create your team</p>
                         <Grid item xs={2}>
-                            <Link to="/" className='btn-default'>Back</Link>
+                            <Link to="/" className='btn-default' style={{"padding": "0 30px"}}>Back</Link>
                         </Grid>
                     </div>
 
@@ -123,7 +141,7 @@ export default function Register() {
                                                                 value={teamWebSite || ''}
                                                                 ref={register({
                                                                     required: true,
-                                                                    validate: value => Utils.validURL(value)
+                                                                    validate: value => Utils.checkUrl(value)
                                                                 })}
                                                                 onChange={e => setTeamWebSite(e.target.value)} />
                                                              
@@ -191,11 +209,11 @@ export default function Register() {
 
                                     <Grid item xs={12}>
 
-                                        <Squad saveSquad={saveSquad} />
+                                        <Squad saveSquad={saveSquad} infoSquad={props.match.params.id}/>
                                         
                                         <Grid container spacing={10}>
                                             <Grid item xs={6}>                            
-                                                <button type="button" className="btn-save" onClick={onSubmit}>Save</button>
+                                                <button type="submit" className="btn-save">Save</button>
                                             </Grid>
                                         </Grid>    
                                     </Grid>

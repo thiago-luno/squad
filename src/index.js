@@ -12,7 +12,8 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
         <Route path='/' exact={true} component={App} />
-        <Route path='/register' component={Register} />
+        <Route path='/register' exact={true} component={Register} />
+        <Route path='/register/:id' component={Register} />
       </Switch>
     </BrowserRouter>
   </DndProvider>,

@@ -16,10 +16,6 @@ function App() {
     setSquads(squads)
   },[squads])
 
-  function deleteSquad(id) {
-    const list = squads.filter( team => team.id !== id);
-    setSquads(list)
-  }
 
   function editSquad(id) {
 
@@ -48,7 +44,6 @@ function App() {
     <div>
         <Home 
           squads={squads} 
-          deleteSquad={deleteSquad} 
           createMode={createMode}/>
   
 

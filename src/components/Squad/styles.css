@@ -31,9 +31,8 @@
 
 .player {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    line-height: 55px;
     background: #cf9bbe;
     width: 70px;
     height: 70px;

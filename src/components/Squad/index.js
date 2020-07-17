@@ -5,15 +5,15 @@ import ServiceApi from "../../services/api";
 import LabelPlayer from './LabelPlayer';
 import Field from './Field';
 import _ from "lodash";
-import produce from 'immer'
-import './styles.css'
+import produce from 'immer';
+import Api from "../../services/api";
+import './styles.css';
 
 export default function Squad(props) {
-
-    const { createMode, saveSquad } = props;
+    const { saveSquad, infoSquad } = props;
     const [ query, setQuery ] = useState('')
     const [listPlayers, setListPlayers] = useState([]);
-    const [formation, setFormation] = useState([]);
+    const [formation, setFormation] = useState('4-4-2');
 
     // formation 4-4-2
     const [droppedPlayers, setDroppedPlayers] = useState([
@@ -31,10 +31,30 @@ export default function Squad(props) {
     ])
 
     useEffect(() => {
+
+        if(infoSquad) {
+            const team = Api.getSquadById(infoSquad);
+            setDroppedPlayers(team.squad.squad);
+            setFormation(team.squad.formation);
+            return
+        }
+        setDroppedPlayers(droppedPlayers);
+        setFormation('4-4-2');
+    
+    },[])
+
+    useEffect(() => {
         searchPlayer(query)
+        saveSquad(droppedPlayers, formation)
     },[droppedPlayers])
 
+    useEffect(() => {
+        saveSquad(droppedPlayers, formation)
+    },[formation])
+
     function changeFormation(formation) {
+        setFormation(formation);
+
         const lines = getLines(formation);   
         let position = [];
         position[0] = "gk";
@@ -61,7 +81,7 @@ export default function Squad(props) {
                 position[x + (parseInt(lines.middle) + parseInt(lines.defense))] = "attack";
             }
         }
-
+        console.log('droppedPlayers :>> ', droppedPlayers);
         setDroppedPlayers(produce(droppedPlayers, drafts => {
             for(const index in position) {
                 drafts[index].position = position[index];
@@ -106,12 +126,14 @@ export default function Squad(props) {
     const delayedQuery = _.debounce(q => searchPlayer(q), 300);
 
     async function searchPlayer(name) {
-        const response = await ServiceApi.getPlayer(name);
-        const idsPlayers = droppedPlayers.map( player => player.idPlayer);
+        let response = await ServiceApi.getPlayer(name);
+        if(droppedPlayers) {
+            const idsPlayers =  droppedPlayers.map( player => player.idPlayer);
+            response = response.filter((eachElem, index) => idsPlayers.indexOf(eachElem.idPlayer) == -1)
 
-        const filtred = response.filter((eachElem, index) => idsPlayers.indexOf(eachElem.idPlayer) == -1)
+        }
         
-        setListPlayers(filtred);
+        setListPlayers(response);
     }
 
     function onChange(e) {
@@ -133,7 +155,6 @@ export default function Squad(props) {
 
    
     return (
-
             <Grid container>
                 <Grid item xs={12}>
                     <h3 className="teamInfo__title">Configure Squad</h3>
@@ -166,7 +187,5 @@ export default function Squad(props) {
                     </Grid>
                 </Grid>
             </Grid>
-
-
     )
 }

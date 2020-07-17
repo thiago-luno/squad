@@ -3,8 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import Picked from '../Picked';
-
-import './styles.css'
+import './styles.css';
 
 export default function TopFive() {
     return (

@@ -32,7 +32,8 @@
 }
 
 .right-side, .left-side {
-    width: 50%;
+    display: flex;
+    align-items: center;
     position: absolute;
     text-align: center;
 }
@@ -41,7 +42,7 @@
 }
 
 .left-side {
-    left: 0;
+
 }
 
 .picked__content-avatar {
@@ -59,7 +60,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 100px;
+    width: 150px;
     height: 100px;
     border-radius: 100%;
     background: #fff;

@@ -16,13 +16,15 @@ import { FaPencilAlt, FaShareAlt, FaTrash, FaCaretDown } from 'react-icons/fa';
 import './styles.css';
 
 export default function MyTeams(props) {
-    console.log('props', props)
-    const { squads, deleteSquad, createMode } = props;
+    const { squads,  createMode, removeSquad } = props;
     const [ sortBy, setOrderBy ] = useState('asc');
     const [ rows, setRows ] = useState(squads);
     
+    // icons
     const IconDelete = React.forwardRef((props, ref) => <div {...props} ref={ref} className="cursor-pointer"><FaTrash /></div>);
+
     const IconShare = React.forwardRef((props, ref) => <div {...props} ref={ref} className="cursor-pointer"><FaShareAlt /></div>);
+
     const IconEdit = React.forwardRef((props, ref) => <div {...props} ref={ref} className="cursor-pointer"><FaPencilAlt /></div>);
 
     function sort(column) {
@@ -30,11 +32,11 @@ export default function MyTeams(props) {
         setRows(orderBy(rows, [column], [order]));
         setOrderBy(order);
     }
-
+    
     useEffect( () => {
         setRows(props.squads)
     }, [props.squads])
-
+    
     return (
         <>
             <Card className="card-app myTeams">
@@ -67,7 +69,7 @@ export default function MyTeams(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {rows && rows.map((row) => (
                                 <TableRow key={row.id} hover >
                                     <TableCell component="th" scope="row">
                                         {row.teamName}
@@ -76,7 +78,7 @@ export default function MyTeams(props) {
                                         {row.description}
                                         <div className="style-row-icons">
                                             <Tooltip arrow title="Delete" placement="top">
-                                                <IconDelete onClick={()=> deleteSquad(row.id)}/>
+                                                <IconDelete onClick={()=> removeSquad(row.id)}/>
                                             </Tooltip>
 
                                             <Tooltip arrow title="Share" placement="top">
@@ -84,7 +86,9 @@ export default function MyTeams(props) {
                                             </Tooltip>
                                             
                                             <Tooltip arrow title="Edit" placement="top">
-                                                <IconEdit  onClick={() => createMode(true)}/>
+                                                <Link to={`register/${row.id}`}>
+                                                    <IconEdit />
+                                                </Link>
                                             </Tooltip>
                                         </div>
                                     </TableCell>
