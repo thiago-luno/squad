@@ -29,13 +29,13 @@ export default function Home(props) {
             <div className="container">
                 <div className="content-home">
                     <Grid container spacing={3}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <MyTeams 
                                 squads={squads} 
                                 removeSquad={removeSquad}
                                 />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <TopFive />
                         </Grid>
                     </Grid>

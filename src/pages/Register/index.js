@@ -54,7 +54,6 @@ export default function Register(props) {
 
         if(Api.getSquads().length > 0) {
             teams = Api.getSquads();
-            console.log('id :>> ', id);
             idTeam = props.match.params.id ? props.match.params.id : teams[0].id + 1;
         } else {
             idTeam = 1;

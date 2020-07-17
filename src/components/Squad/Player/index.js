@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 
 export default function Player(props) {
-    const { player, onDrop, teste } = props;
+    const { player, onDrop } = props;
     const [ showInfo, setShowInfo] = useState(false);
 
     const [{ canDrop, isOver }, drop] = useDrop({

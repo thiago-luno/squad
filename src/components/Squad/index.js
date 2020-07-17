@@ -81,7 +81,7 @@ export default function Squad(props) {
                 position[x + (parseInt(lines.middle) + parseInt(lines.defense))] = "attack";
             }
         }
-        console.log('droppedPlayers :>> ', droppedPlayers);
+
         setDroppedPlayers(produce(droppedPlayers, drafts => {
             for(const index in position) {
                 drafts[index].position = position[index];
@@ -161,7 +161,7 @@ export default function Squad(props) {
                 </Grid>
 
                 <Grid container spacing={10}>
-                    <Grid item xs={6}>
+                    <Grid item sm={6} xs={12}>
                         <div className="form-group">
                             <label className="form-label" htmlFor="" style={{ "marginRight": "30px" }}>Formation </label>
 
@@ -174,7 +174,7 @@ export default function Squad(props) {
                     
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item  sm={6} xs={12}>
                         <div className="form-group">
                             <label className="form-label no-mt" htmlFor="">Search Players</label>
                             <input type="text" placdeholer="Insert team name" onChange={onChange} />

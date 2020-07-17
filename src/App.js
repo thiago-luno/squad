@@ -37,7 +37,7 @@ function App() {
 
   
   function saveSquad(team) {
-    console.log('save', team)
+
   }
 
   return (
