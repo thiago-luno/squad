@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect}  from 'react';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -9,6 +9,12 @@ import './styles.css';
 
 export default function Home(props) {
 
+    const [ squads, setSquads ] = useState([])
+
+    useEffect(() => {
+        setSquads(JSON.parse(sessionStorage.getItem('teams')))
+    }, [])
+
     return (
         <div>
             <Header />
@@ -17,7 +23,7 @@ export default function Home(props) {
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <MyTeams 
-                                squads={props.squads} 
+                                squads={squads} 
                                 deleteSquad={props.deleteSquad}
                                 createMode={props.createMode}
                                 />

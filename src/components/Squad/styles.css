@@ -30,6 +30,7 @@
 }
 
 .player {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,6 +46,17 @@
     color: #fff;
     cursor: pointer;
     z-index: 999;
+}
+
+.info-player {
+    display: flex;
+    position: absolute;
+    top: -85px;
+    background: #8f6b839c;
+    width: 210px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 5px;
 }
 
 .field__marks-large {
@@ -76,7 +88,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    align-self: flex-end;
     width: 100%;
   }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import ServiceApi from "../../services/api";
@@ -11,27 +11,30 @@ import './styles.css'
 export default function Squad(props) {
 
     const { createMode, saveSquad } = props;
-
+    const [ query, setQuery ] = useState('')
     const [listPlayers, setListPlayers] = useState([]);
     const [formation, setFormation] = useState([]);
 
     // formation 4-4-2
     const [droppedPlayers, setDroppedPlayers] = useState([
-        {id: '1', value: null, position: 'gk'},
-        {id: '2', value: null, position: "deffense"},
-        {id: '3', value: null, position: "deffense"},
-        {id: '4', value: null, position: "deffense"},
-        {id: '5', value: null, position: "deffense"},
-        {id: '6', value: null, position: "middle"},
-        {id: '7', value: null, position: "middle"},
-        {id: '8', value: null, position: "middle"},
-        {id: '9', value: null, position: "middle"},
-        {id: '10', value: null, position: "attack"},
-        {id: '11', value: null, position: "attack"}
+        {id: '1', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: 'gk'},
+        {id: '2', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "deffense"},
+        {id: '3', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "deffense"},
+        {id: '4', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "deffense"},
+        {id: '5', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "deffense"},
+        {id: '6', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "middle"},
+        {id: '7', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "middle"},
+        {id: '8', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "middle"},
+        {id: '9', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "middle"},
+        {id: '10', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "attack"},
+        {id: '11', value: null, born: null, team: null, nationality: null, weight: null, idPlayer: null, position: "attack"}
     ])
 
+    useEffect(() => {
+        searchPlayer(query)
+    },[droppedPlayers])
+
     function changeFormation(formation) {
-        
         const lines = getLines(formation);   
         let position = [];
         position[0] = "gk";
@@ -62,10 +65,14 @@ export default function Squad(props) {
         setDroppedPlayers(produce(droppedPlayers, drafts => {
             for(const index in position) {
                 drafts[index].position = position[index];
+                drafts[index].value = null; 
+                drafts[index].born = null;
+                drafts[index].team = null;
+                drafts[index].nationality = null;
+                drafts[index].weight = null;
+                drafts[index].idPlayer = null;
             }
         })) 
-        
-        console.log('droppedPlayers', droppedPlayers)
     }
 
     function getLines(formation) {
@@ -100,38 +107,31 @@ export default function Squad(props) {
 
     async function searchPlayer(name) {
         const response = await ServiceApi.getPlayer(name);
-        setListPlayers(response);
+        const idsPlayers = droppedPlayers.map( player => player.idPlayer);
+
+        const filtred = response.filter((eachElem, index) => idsPlayers.indexOf(eachElem.idPlayer) == -1)
+        
+        setListPlayers(filtred);
     }
 
     function onChange(e) {
+        setQuery(e.target.value)
         delayedQuery(e.target.value);
     }
 
     function insertPlayer(drag, drop) {
         setDroppedPlayers(produce(droppedPlayers, draft => {
             let index = drop.id - 1;
-            draft[index].value = nameInitials(drag.player.strPlayer);
+            draft[index].idPlayer = drag.player.idPlayer;
+            draft[index].value = drag.player.strPlayer;
+            draft[index].team = drag.player.strTeam;
+            draft[index].born = drag.player.dateBorn;
+            draft[index].nationality = drag.player.strNationality;
+            draft[index].weight = drag.player.strWeight;
         }))
     }
 
-    function nameInitials(name) {
-        let str = name.split(" ")
-
-        if(str.length === 1) {
-            let initital = str[0][0];
-
-            if(str[0][1])
-                initital += str[0][1]
-            if(str[0][2])
-                initital += str[0][2]
-
-            return  initital
-
-        } else {
-            return `${str[0][0].toUpperCase()} ${str[str.length-1][0].toUpperCase()}`
-        }
-    }
-
+   
     return (
 
             <Grid container>
@@ -160,7 +160,7 @@ export default function Squad(props) {
                         </div>
                         <div className="content-list-players">
                             {listPlayers && listPlayers.map(
-                                player => <LabelPlayer key={player.idPlayer} player={player} />
+                                player => <LabelPlayer key={player.idPlayer} player={player}/>
                             )}
                         </div>
                     </Grid>

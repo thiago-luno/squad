@@ -1,54 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import Home from './pages/Home'
-import Register from './pages/Register'
-import  { DndProvider }   from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import Home from './pages/Home';
+import Register from './pages/Register';
+import  { DndProvider }   from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import produce from 'immer';
 
 import './App.css';
 
 function App() {
 
   const [createTeam, setCreateTeam] = useState(true);
+  const [squads, setSquads] = useState([])
 
-  const [squads, setSquads] = useState([
-    { id: 1, name: 'Barcelona', description: 'Barcelona Squad' },
-    { id: 2, name: 'Real Madrid', description: 'Real Madrid Squad' },
-    { id: 3, name: 'Milan', description: 'Milan Squad' },
-    { id: 4, name: 'Liverpool', description: 'Liverpool Squad' },
-    { id: 5, name: 'Lazio', description: 'Lazio Squad' }
-  ]);
+  useEffect(() => {
+    setSquads(squads)
+  },[squads])
 
   function deleteSquad(id) {
-    let list = squads.filter( team => team.id !== id);
-    setSquads(list);
-    console.log('squads', squads)
+    const list = squads.filter( team => team.id !== id);
+    setSquads(list)
+  }
+
+  function editSquad(id) {
+
   }
 
   function createMode(bool) {
-    setCreateTeam(bool)
+    setCreateTeam(bool);
   }
 
+  function insertSquad(squad) {
+    squad.id = squads.length ? squads[squads.length - 1].id + 1 : 1
+    setSquads(produce(draft => {
+      draft.push(squad);
+    }))
+
+    setCreateTeam(false);
+
+  }
+
+  
   function saveSquad(team) {
     console.log('save', team)
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      
-      {!createTeam &&
+    <div>
         <Home 
           squads={squads} 
           deleteSquad={deleteSquad} 
           createMode={createMode}/>
-      }
+  
 
-      {createTeam &&
+      {/* {createTeam &&
         <Register 
           createMode={createMode} 
+          insertSquad={insertSquad}
           saveSquad={saveSquad}/>
-      }
+      } */}
 
-    </DndProvider>
+    </div>
   );
 }
 

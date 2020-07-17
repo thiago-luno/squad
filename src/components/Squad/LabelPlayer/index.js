@@ -10,17 +10,13 @@ export default function LabelPlayer(props) {
     const [{ isDragging }, drag] = useDrag({
         item: {player, type: 'ITEM' },
         end: (item, monitor) => {
-            // console.log('item :>> ', item);
             const dropResult = monitor.getDropResult()
-            if (item && dropResult) {
-                // alert(`You dropped ${item} into ${dropResult.name}!`)
-            }
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
     })
-    const css = isDragging ? {"border": "2px solid red", "cursor": "grabbing", "background": "#fff", "color": "#fff", "opacity": "1"} : {"opacity": "1"}
+    const css = isDragging ? {"opacity": "0"} : {"opacity": "1"}
     return (
         <div className="list-players__item" ref={drag} style={css}>
             <div className="d-flex flex-direction-column">

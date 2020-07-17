@@ -10,12 +10,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import { Link } from 'react-router-dom';
 import { FaPencilAlt, FaShareAlt, FaTrash, FaCaretDown } from 'react-icons/fa';
 
 import './styles.css';
 
 export default function MyTeams(props) {
+    console.log('props', props)
     const { squads, deleteSquad, createMode } = props;
     const [ sortBy, setOrderBy ] = useState('asc');
     const [ rows, setRows ] = useState(squads);
@@ -39,7 +40,7 @@ export default function MyTeams(props) {
             <Card className="card-app myTeams">
                 <div className="myTeams__header card-app__container-header">
                     <p className="titles myTeams__content-title" >My teams</p>
-                    <button className="btn-default  myTeams__content-btn" onClick={() => createMode(true)}>+</button>
+                    <Link to="register" className="btn-default  myTeams__content-btn"> +</Link>
                 </div>
                 <Divider />
                 <CardContent className="card-app__container">
@@ -69,7 +70,7 @@ export default function MyTeams(props) {
                             {rows.map((row) => (
                                 <TableRow key={row.id} hover >
                                     <TableCell component="th" scope="row">
-                                        {row.name}
+                                        {row.teamName}
                                     </TableCell>
                                     <TableCell className="row">
                                         {row.description}

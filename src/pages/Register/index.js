@@ -4,15 +4,15 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Divider from '@material-ui/core/Divider';
 import Header from '../../components/Header';
-import TeamInfo from '../../components/TeamInfo';
 import Footer from '../../components/Footer';
 import Squad from '../../components/Squad';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from "@material-ui/core/TextField";
+import Utils from '../../services/utils';
+import { useHistory } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-export default function Register(props) {
-
-    const { createMode, saveSquad } = props;
+export default function Register() {
 
     const [teamName, setTeamName] = useState('');
     const [description, setDescription] = useState('');
@@ -20,17 +20,41 @@ export default function Register(props) {
     const [type, setType] = useState('');
     const [tags, setTags] = useState([]);
 
+    const history = useHistory();
+
     const { register, handleSubmit, errors } = useForm();
 
-    function onSubmitClick() {
-        console.log('form', formReference)
-
+    function saveSquad() {
+    
+    
     }
 
     function onSubmit(data) {
-        console.log("Data submitted: ", data);
-    }
+        let teams = null;
 
+        if(sessionStorage.getItem('teams')) 
+            teams = JSON.parse(sessionStorage.getItem('teams'))
+        
+        const id = teams ? teams[teams.length - 1].id + 1 : 1;
+
+        const team = {
+            id,
+            teamName,
+            description,
+            teamWebSite,
+            type,
+            tags
+        }
+
+        if(teams)
+            sessionStorage.setItem('teams', JSON.stringify([].concat(team, ...teams)));
+
+        else
+           sessionStorage.setItem('teams',  JSON.stringify([team]))
+
+
+           history.push("/");
+    }
 
     const formReference = useRef();
 
@@ -42,7 +66,7 @@ export default function Register(props) {
                     <div className="card-app__container-header">
                         <p className="titles myTeams__content-title" >Create your team</p>
                         <Grid item xs={2}>
-                            <button className='btn-default' onClick={() => createMode(false)}>Back</button>
+                            <Link to="/" className='btn-default'>Back</Link>
                         </Grid>
                     </div>
 
@@ -59,16 +83,15 @@ export default function Register(props) {
                                                 <Grid container spacing={10}>
                                                     <Grid item xs={6}>
                                                         <div className="form-group">
-                                                            <label className={errors.website ?  "form-label error-message" : null + " form-label"} htmlFor="team-name">Team name</label>
+                                                            <label className={errors.teamName ?  "form-label error-message" : null + " form-label"} htmlFor="team-name">Team name</label>
                                                             <input
                                                                 type="text"
                                                                 id="teamName"
                                                                 name="teamName"
                                                                 placdeholer="Insert team name"
-                                                                value={teamName || ''}
+                                                                value={teamName}
                                                                 ref={register({
                                                                     required: true,
-                                                                  
                                                                 })}
                                                                 onChange={e => setTeamName(e.target.value)}
                                                             />
@@ -80,7 +103,7 @@ export default function Register(props) {
                                                                 placdeholer="Insert team name"
                                                                 id="description"
                                                                 name="description"
-                                                                value={description || ''}
+                                                                value={description}
                                                                 rows={6}
                                                                 cols={15}
                                                                 ref={register()}
@@ -100,10 +123,10 @@ export default function Register(props) {
                                                                 value={teamWebSite || ''}
                                                                 ref={register({
                                                                     required: true,
-                                                                  
+                                                                    validate: value => Utils.validURL(value)
                                                                 })}
                                                                 onChange={e => setTeamWebSite(e.target.value)} />
-                                                                {/* {errors.website && <p className="error-message">Website is required</p>} */}
+                                                             
                                                         </div>
 
                                                         <div className="form-group space-custom">
@@ -115,7 +138,6 @@ export default function Register(props) {
                                                                         type="radio"
                                                                         name="type"
                                                                         value="Real"
-                                                                        checked={true}
                                                                         ref={register()}
                                                                         onChange={e => setType(e.target.value)} />Real
                                                                 </div>
@@ -169,11 +191,11 @@ export default function Register(props) {
 
                                     <Grid item xs={12}>
 
-                                        <Squad createMode={props.createMode} saveSquad={props.saveSquad} onSubmit={onSubmitClick} />
+                                        <Squad saveSquad={saveSquad} />
                                         
                                         <Grid container spacing={10}>
                                             <Grid item xs={6}>                            
-                                                <button className="btn-save" onClick={onSubmit}>Save</button>
+                                                <button type="button" className="btn-save" onClick={onSubmit}>Save</button>
                                             </Grid>
                                         </Grid>    
                                     </Grid>
